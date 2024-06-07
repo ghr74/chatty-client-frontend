@@ -1,6 +1,9 @@
+import { getRouteApi } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
+const route = getRouteApi('/channel/$channelId')
 const ChannelView = () => {
+    const { channelId } = route.useParams();
     return (
         <div className="md:pl-[370px] pl-5 px-5 py-5 flex flex-col md:w-[calc(100%-230px)] w-full gap-5 text-zinc-200">
             <div className="w-full rounded-xl md:h-[calc(100vh-90px)] h-auto flex flex-col-reverse items-center gap-5 bg-[#121212] px-5 md:py-5 pb-20 pt-5">
@@ -8,7 +11,7 @@ const ChannelView = () => {
                     <div className="w-5/6 rounded-xl bg-zinc-500">
                         <div className="p-3">
                             <span>
-                                Hey Guys, what's up, just got done doing things.
+                                Hey Guys, what's up, just got done doing things. Happy to be in channel {channelId}
                             </span>
                         </div>
                     </div>

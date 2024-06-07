@@ -16,16 +16,11 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const Channel2LazyImport = createFileRoute('/channel2')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
+const ChannelChannelIdLazyImport = createFileRoute('/channel/$channelId')()
 
 // Create/Update Routes
-
-const Channel2LazyRoute = Channel2LazyImport.update({
-  path: '/channel2',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/channel2.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
@@ -36,6 +31,13 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const ChannelChannelIdLazyRoute = ChannelChannelIdLazyImport.update({
+  path: '/channel/$channelId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/channel.$channelId.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -49,8 +51,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
-    '/channel2': {
-      preLoaderRoute: typeof Channel2LazyImport
+    '/channel/$channelId': {
+      preLoaderRoute: typeof ChannelChannelIdLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -61,7 +63,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   AboutLazyRoute,
-  Channel2LazyRoute,
+  ChannelChannelIdLazyRoute,
 ])
 
 /* prettier-ignore-end */

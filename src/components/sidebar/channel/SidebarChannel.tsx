@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PingBadge from "@/components/util/PingBadge";
 import { Channel } from "@/data/channels";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 import { FC } from "react";
 
 const SidebarChannel: FC<{ channel: Channel }> = ({ channel }) => {
@@ -11,7 +12,11 @@ const SidebarChannel: FC<{ channel: Channel }> = ({ channel }) => {
     );
 
     return (
-        <div key={channel.id} className={channelCn}>
+        <Link key={channel.id}
+            className={channelCn}
+            to="/channel/$channelId"
+            params={{channelId: channel.id.toString()}}
+            >
             <div className="flex gap-3 items-center">
                 <Avatar>
                     <AvatarImage src={channel.image}></AvatarImage>
@@ -27,7 +32,7 @@ const SidebarChannel: FC<{ channel: Channel }> = ({ channel }) => {
                 </div>
             </div>
             {channel.pings && <PingBadge pingCount={channel.pings} />}
-        </div>
+        </Link>
     );
 };
 
