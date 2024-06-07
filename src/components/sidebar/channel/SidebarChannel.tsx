@@ -2,20 +2,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PingBadge from "@/components/util/PingBadge";
 import { Channel } from "@/data/channels";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
+import { Link, getRouteApi } from "@tanstack/react-router";
 import { FC } from "react";
 
+const route = getRouteApi("/channel/$channelId");
 const SidebarChannel: FC<{ channel: Channel }> = ({ channel }) => {
+    const { channelId } = route.useParams();
     const channelCn = cn(
         "w-full flex justify-between items-center cursor-pointer group rounded-lg p-1",
-        { "bg-zinc-700": channel.selected },
+        { "bg-zinc-700": channel.id === channelId },
     );
 
     return (
         <Link key={channel.id}
             className={channelCn}
             to="/channel/$channelId"
-            params={{channelId: channel.id.toString()}}
+            params={{channelId: channel.id}}
             >
             <div className="flex gap-3 items-center">
                 <Avatar>
