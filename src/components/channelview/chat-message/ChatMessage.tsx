@@ -3,8 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Message } from "@/types/backendTypes";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
+import { Atom, useAtom } from "jotai";
 
-const ChatMessage = ({ message }: { message: Message }) => {
+const ChatMessage = ({ messageAtom }: { messageAtom: Atom<Message> }) => {
+    const [message] = useAtom(messageAtom);
     const user = useUser();
     const isSelf = useMemo(() => message.userId === user.id, [message, user]);
     return (

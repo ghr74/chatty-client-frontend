@@ -8,7 +8,7 @@ const Navbar = () => {
                 <input
                     type="text"
                     placeholder="Search..."
-                    className="outline-none bg-[#121212] w-full placeholder:text-[#b3b3b3]"
+                    className="outline-none bg-[#121212] w-full placeholder:text-[#b3b3b3] text-[#b3b3b3]"
                 />
             </div>
             <div className="flex items-center gap-3">

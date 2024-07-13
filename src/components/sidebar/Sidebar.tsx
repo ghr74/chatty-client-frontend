@@ -9,13 +9,11 @@ import { channels } from "@/data/channels";
 import PingBadge from "../util/PingBadge";
 import SidebarChannel from "./channel/SidebarChannel";
 
-const Sidebar = () => {
-    const mappedChannels = channels
-        .toSorted((channel) => -(channel.pings ?? 0))
-        .map((channel) => (
-            <SidebarChannel key={channel.id} channel={channel} />
-        ));
+const mappedChannels = channels
+    .toSorted((channel) => -(channel.pings ?? 0))
+    .map((channel) => <SidebarChannel key={channel.id} channel={channel} />);
 
+const Sidebar = () => {
     // TODO: use Separator instead of the hr
     return (
         <div className="md:h-screen h-fit md:w-[350px] w-full bg-[#121212] md:absolute block md:left-0 top-0 p-4 z-30">

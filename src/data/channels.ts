@@ -2,7 +2,6 @@ export type Channel = {
     id: number;
     name: string;
     image?: string;
-    selected?: boolean;
     lastMessage?: string;
     pings?: number;
 };
@@ -12,7 +11,6 @@ export const channels: Channel[] = [
         id: 1,
         name: "Test Channel 1",
         image: "/channel.png",
-        selected: true,
         lastMessage: "User5: Hey guys, what's up, just got done doing things.",
     },
     {

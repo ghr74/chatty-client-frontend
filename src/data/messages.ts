@@ -1,4 +1,7 @@
 import { Message } from "@/types/backendTypes";
+import { HubConnection } from "@microsoft/signalr";
+import { atom } from "jotai";
+import { splitAtom } from "jotai/utils";
 
 export const mock_messages: Message[] = [
     {
@@ -35,3 +38,8 @@ export const mock_messages: Message[] = [
         sentAt: "2022-10-09T15:00:00.000Z",
     },
 ];
+
+const messagesAtom = atom(mock_messages);
+export const messagesSplitAtom = splitAtom(messagesAtom);
+
+export const connectionAtom = atom<HubConnection | null>(null);
