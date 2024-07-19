@@ -8,6 +8,7 @@ import {
 import { channels } from "@/data/channels";
 import PingBadge from "../util/PingBadge";
 import SidebarChannel from "./channel/SidebarChannel";
+import { Link } from "@tanstack/react-router";
 
 const mappedChannels = channels
     .toSorted((channel) => -(channel.pings ?? 0))
@@ -18,12 +19,15 @@ const Sidebar = () => {
     return (
         <div className="md:h-screen h-fit md:w-[350px] w-full bg-[#121212] md:absolute block md:left-0 top-0 p-4 z-30">
             <div className="w-full flex flex-col gap-5 md:px-0 px-3 pt-1">
-                <div className="flex items-center gap-3 cursor-pointer group px-1">
+                <Link
+                    className="flex items-center gap-3 cursor-pointer group px-1"
+                    to="/channel/home"
+                >
                     <HomeIcon className="stroke-zinc-400 group-hover:stroke-zinc-100" />
                     <span className="font-medium text-zinc-400 text-[14.5px] group-hover:text-zinc-100">
                         Home
                     </span>
-                </div>
+                </Link>
                 <div className="w-full flex items-center justify-between cursor-pointer group px-1">
                     <div className="flex items-center gap-3 cursor-pointer group">
                         <BellDot className="stroke-zinc-400 group-hover:stroke-zinc-100" />

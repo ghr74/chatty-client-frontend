@@ -15,7 +15,7 @@ import { HubConnectionState } from "@microsoft/signalr";
 const ChatInput = () => {
     const conn = useAtomValue(chatConnectionAtom);
     const setMessagesSplitAtom = useSetAtom(messagesSplitAtom);
-    const { channelId } = useParams({ from: "/channel/$channelId" });
+    const { channelId } = useParams({ from: "/_authed/channel/$channelId" });
     const channel = channels.find((c) => c.id === channelId);
     const user = useUser();
     const [input, setInput] = useState("");

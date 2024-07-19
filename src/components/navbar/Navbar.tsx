@@ -18,7 +18,9 @@ const Navbar = () => {
                 <div className="rounded-full w-[34px] h-[34px] bg-zinc-700 grid place-items-center cursor-pointer hover:bg-zinc-600">
                     <Users2 color={"#b3b3b3"} />
                 </div>
-                <div className="rounded-full w-[34px] h-[34px] bg-zinc-700 grid place-items-center cursor-pointer hover:bg-zinc-600">
+                <div onClick={() => {
+                    localStorage.removeItem("at")
+                }} className="rounded-full w-[34px] h-[34px] bg-zinc-700 grid place-items-center cursor-pointer hover:bg-zinc-600">
                     <UserPlus2 color={"#b3b3b3"} />
                 </div>
             </div>

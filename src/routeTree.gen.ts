@@ -13,12 +13,16 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ChannelChannelIdImport } from './routes/channel.$channelId'
+import { Route as LoginImport } from './routes/login'
+import { Route as AuthedImport } from './routes/_authed'
+import { Route as AuthedChannelChannelIdImport } from './routes/_authed/channel/$channelId'
 
 // Create Virtual Routes
 
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
+const AuthedAboutLazyImport = createFileRoute('/_authed/about')()
+const AuthedChannelHomeLazyImport = createFileRoute('/_authed/channel/home')()
 
 // Create/Update Routes
 
@@ -27,14 +31,36 @@ const AboutLazyRoute = AboutLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
+const LoginRoute = LoginImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+
+const AuthedRoute = AuthedImport.update({
+  id: '/_authed',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/_authed.lazy').then((d) => d.Route))
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const ChannelChannelIdRoute = ChannelChannelIdImport.update({
+const AuthedAboutLazyRoute = AuthedAboutLazyImport.update({
+  path: '/about',
+  getParentRoute: () => AuthedRoute,
+} as any).lazy(() => import('./routes/_authed/about.lazy').then((d) => d.Route))
+
+const AuthedChannelHomeLazyRoute = AuthedChannelHomeLazyImport.update({
+  path: '/channel/home',
+  getParentRoute: () => AuthedRoute,
+} as any).lazy(() =>
+  import('./routes/_authed/channel/home.lazy').then((d) => d.Route),
+)
+
+const AuthedChannelChannelIdRoute = AuthedChannelChannelIdImport.update({
   path: '/channel/$channelId',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthedRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -42,26 +68,113 @@ const ChannelChannelIdRoute = ChannelChannelIdImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthedImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
-    '/channel/$channelId': {
-      preLoaderRoute: typeof ChannelChannelIdImport
-      parentRoute: typeof rootRoute
+    '/_authed/about': {
+      id: '/_authed/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AuthedAboutLazyImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/channel/$channelId': {
+      id: '/_authed/channel/$channelId'
+      path: '/channel/$channelId'
+      fullPath: '/channel/$channelId'
+      preLoaderRoute: typeof AuthedChannelChannelIdImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/channel/home': {
+      id: '/_authed/channel/home'
+      path: '/channel/home'
+      fullPath: '/channel/home'
+      preLoaderRoute: typeof AuthedChannelHomeLazyImport
+      parentRoute: typeof AuthedImport
     }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  AuthedRoute: AuthedRoute.addChildren({
+    AuthedAboutLazyRoute,
+    AuthedChannelChannelIdRoute,
+    AuthedChannelHomeLazyRoute,
+  }),
+  LoginRoute,
   AboutLazyRoute,
-  ChannelChannelIdRoute,
-])
+})
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/_authed",
+        "/login",
+        "/about"
+      ]
+    },
+    "/": {
+      "filePath": "index.lazy.tsx"
+    },
+    "/_authed": {
+      "filePath": "_authed.tsx",
+      "children": [
+        "/_authed/about",
+        "/_authed/channel/$channelId",
+        "/_authed/channel/home"
+      ]
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/about": {
+      "filePath": "about.lazy.tsx"
+    },
+    "/_authed/about": {
+      "filePath": "_authed/about.lazy.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/channel/$channelId": {
+      "filePath": "_authed/channel/$channelId.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/channel/home": {
+      "filePath": "_authed/channel/home.lazy.tsx",
+      "parent": "/_authed"
+    }
+  }
+}
+ROUTE_MANIFEST_END */

@@ -7,7 +7,7 @@ import { atom, useAtom } from "jotai";
 import { Message } from "@/types/backendTypes";
 import ChatMessage from "./chat-message/ChatMessage";
 
-const route = getRouteApi("/channel/$channelId");
+const route = getRouteApi("/_authed/channel/$channelId");
 const ChannelView = () => {
     const { channelId } = route.useParams();
     const [conn, setConn] = useAtom(connectionAtom);
