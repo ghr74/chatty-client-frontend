@@ -29,7 +29,7 @@ const ChatMessage = ({ messageAtom }: { messageAtom: Atom<Message> }) => {
                     "flex-row-reverse": !isSelf,
                 })}
             >
-                <div className={cn("rounded-lg bg-zinc-500 p-2 px-3")}>
+                <div className={cn("rounded-lg bg-zinc-600 p-2 px-3", {"bg-slate-700": isSelf})}>
                     <span>{message.message}</span>
                 </div>
                 <div className="flex gap-3 items-center flex-row-reverse">

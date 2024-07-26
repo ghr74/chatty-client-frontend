@@ -8,15 +8,17 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { useCallback } from "react";
 
 const LoginForm = () => {
     const router = useRouter();
+    const redirect = useSearch({ from: "/login", select: (s) => s.redirect });
     const handleLoginButtonClick = useCallback(() => {
         localStorage.setItem("at", "token");
-        router.history.push("/channel/home");
-    }, [router.history]);
+        router.history.push(redirect || "/channel/home");
+    }, [redirect, router.history]);
+
     return (
         <Card className="mx-auto max-w-sm">
             <CardHeader>
@@ -64,8 +66,10 @@ const LoginForm = () => {
 
 const Login = () => {
     return (
-        <div className="flex items-center h-full">
-            <LoginForm />
+        <div className="bg-zinc-900 w-full h-full">
+            <div className="flex items-center h-full">
+                <LoginForm />
+            </div>
         </div>
     );
 };

@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { channels } from "@/data/channels";
 import {
     connectionAtom as chatConnectionAtom,
     messagesSplitAtom,
@@ -9,14 +8,22 @@ import { useUser } from "@/data/users";
 import { useParams } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import SendButton from "./SendButton";
-import { useAtomValue, useSetAtom } from "jotai";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import { HubConnectionState } from "@microsoft/signalr";
+import { channelAtomsAtom } from "@/data/channels";
 
 const ChatInput = () => {
     const conn = useAtomValue(chatConnectionAtom);
     const setMessagesSplitAtom = useSetAtom(messagesSplitAtom);
     const { channelId } = useParams({ from: "/_authed/channel/$channelId" });
-    const channel = channels.find((c) => c.id === channelId);
+    const channelAtom = useMemo(
+        () =>
+            atom((get) =>
+                get(channelAtomsAtom).find((ca) => get(ca).id === channelId),
+            ),
+        [channelId],
+    );
+    const channel = useAtomValue(channelAtom)
     const user = useUser();
     const [input, setInput] = useState("");
     const handleInputEnter = useCallback(() => {

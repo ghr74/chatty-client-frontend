@@ -1,3 +1,6 @@
+import { atom } from "jotai";
+import { splitAtom } from "jotai/utils";
+
 export type Channel = {
     id: number;
     name: string;
@@ -6,7 +9,7 @@ export type Channel = {
     pings?: number;
 };
 
-export const channels: Channel[] = [
+const mock_channels: Channel[] = [
     {
         id: 1,
         name: "Test Channel 1",
@@ -19,6 +22,9 @@ export const channels: Channel[] = [
         image: "/channel.png",
         pings: 1,
         lastMessage:
-            "3rdUser: I just read about that. Very crazy things happened there.",
+            "3rdUser: I just read about that. Very crazy things happened there. In fact, it was so crazy I wrote this really long post about it.",
     },
 ];
+
+const channelsAtom = atom(mock_channels);
+export const channelAtomsAtom = splitAtom(channelsAtom)

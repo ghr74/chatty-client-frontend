@@ -37,6 +37,15 @@ export const mock_messages: Message[] = [
             "Hey Guys, what's up, just got done doing things. Happy to be in channel 1.",
         sentAt: "2022-10-09T15:00:00.000Z",
     },
+    {
+        id: 5,
+        userId: 3,
+        userName: "3rdUser",
+        channelId: 2,
+        message:
+            "I just read about that. Very crazy things happened there. In fact, it was so crazy I wrote this really long post about it.",
+        sentAt: "2022-10-09T15:00:00.000Z",
+    },
 ];
 
 const messagesAtom = atom(mock_messages);
