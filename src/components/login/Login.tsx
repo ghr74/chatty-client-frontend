@@ -8,12 +8,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getTestPasswort, getTestUser } from "@/lib/env";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 const LoginForm = () => {
     const router = useRouter();
     const redirect = useSearch({ from: "/login", select: (s) => s.redirect });
+    const [emailValue, setEmailValue] = useState(getTestUser() ?? "");
+    const [passwordValue, setPasswordValue] = useState(getTestPasswort() ?? "");
+
     const handleLoginButtonClick = useCallback(() => {
         localStorage.setItem("at", "token");
         router.history.push(redirect || "/channel/home");
@@ -31,7 +35,13 @@ const LoginForm = () => {
                 <div className="grid gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" required />
+                        <Input
+                            id="email"
+                            type="email"
+                            value={emailValue}
+                            onChange={(e) => setEmailValue(e.target.value)}
+                            required
+                        />
                     </div>
                     <div className="grid gap-2">
                         <div className="flex items-center">
@@ -43,7 +53,13 @@ const LoginForm = () => {
                                 Forgot your password?
                             </Link>
                         </div>
-                        <Input id="password" type="password" required />
+                        <Input
+                            id="password"
+                            type="password"
+                            value={passwordValue}
+                            onChange={(e) => setPasswordValue(e.target.value)}
+                            required
+                        />
                     </div>
                     <Button
                         type="submit"
@@ -55,7 +71,7 @@ const LoginForm = () => {
                 </div>
                 <div className="mt-4 text-center text-sm">
                     Don&apos;t have an account?{" "}
-                    <Link href="#" className="underline">
+                    <Link to="/register" className="underline">
                         Sign up
                     </Link>
                 </div>

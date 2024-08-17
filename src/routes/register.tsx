@@ -1,13 +1,13 @@
-import { getAuthentication } from "@/lib/auth";
+import { getAuthentication as getValidToken } from "@/lib/auth";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 type LoginSearch = {
     redirect?: string;
 };
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/register")({
     beforeLoad: () => {
-        if (getAuthentication()) {
+        if (getValidToken()) {
             throw redirect({
                 to: "/home",
             });
