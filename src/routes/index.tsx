@@ -5,7 +5,7 @@ export const Route = createFileRoute("/")({
     beforeLoad: () => {
         if (getAuthentication()) {
             throw redirect({
-                to: "/channel/home",
+                to: "/home",
             });
         } else {
             throw redirect({

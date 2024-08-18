@@ -18,12 +18,16 @@ const ChatInput = () => {
     const { channelId } = useParams({ from: "/_authed/channel/$channelId" });
     const channelAtom = useMemo(
         () =>
-            atom((get) =>
-                get(channelAtomsAtom).find((ca) => get(ca).id === channelId),
-            ),
+            atom((get) => {
+                const foundChannel = get(channelAtomsAtom).find(
+                    (ca) => get(ca).id === channelId,
+                );
+                if (foundChannel) return get(foundChannel);
+                return null;
+            }),
         [channelId],
     );
-    const channel = useAtomValue(channelAtom)
+    const channel = useAtomValue(channelAtom);
     const user = useUser();
     const [input, setInput] = useState("");
     const handleInputEnter = useCallback(() => {
@@ -46,6 +50,7 @@ const ChatInput = () => {
         setInput("");
     }, [channelId, conn, input, setMessagesSplitAtom, user.id, user.name]);
     const hasInput = useMemo(() => input.length <= 0, [input.length]);
+
     return (
         <>
             <Input

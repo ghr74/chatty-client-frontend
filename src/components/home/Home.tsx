@@ -1,5 +1,4 @@
 import { useUser } from "@/data/users";
-import React from "react";
 
 const Home = () => {
     const user = useUser();

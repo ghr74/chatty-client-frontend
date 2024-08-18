@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { HomeIcon, MessageSquareMore, Settings } from "lucide-react";
-import React from "react";
 import PingBadge from "../util/PingBadge";
 
 const SidebarMenu = () => {
