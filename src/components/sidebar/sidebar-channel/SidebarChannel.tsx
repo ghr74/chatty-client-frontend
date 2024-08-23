@@ -16,7 +16,7 @@ const SidebarChannel: FC<{ channelAtom: Atom<Channel> }> = ({
     });
     const channelCn = cn(
         "w-full flex justify-between items-center cursor-pointer group rounded-lg p-1",
-        { "bg-zinc-700": channel.id === currentChannelId },
+        { "": channel.id === currentChannelId },
     );
 
     return (
@@ -26,16 +26,14 @@ const SidebarChannel: FC<{ channelAtom: Atom<Channel> }> = ({
             to="/channel/$channelId"
             params={{ channelId: channel.id }}
         >
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
                 <Avatar>
                     <AvatarImage src={channel.image}></AvatarImage>
                     <AvatarFallback>{channel.name}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                    <span className="font-medium text-zinc-300 text-md group-hover:text-zinc-50">
-                        {channel.name}
-                    </span>
-                    <span className="font-medium text-zinc-400 text-xs group-hover:text-zinc-50 line-clamp-2">
+                    <span className="text-md font-medium">{channel.name}</span>
+                    <span className="line-clamp-2 text-xs font-medium">
                         {channel.lastMessage ?? "No messages yet."}
                     </span>
                 </div>

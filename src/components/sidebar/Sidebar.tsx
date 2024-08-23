@@ -25,13 +25,13 @@ const Sidebar = () => {
     );
     // TODO: use Separator instead of the hr
     return (
-        <div className="md:h-screen h-fit md:w-[350px] w-full bg-[#121212] md:absolute block md:left-0 top-0 p-4 z-30">
+        <div className="md:h-screen h-fit md:w-[350px] w-full md:absolute block md:left-0 top-0 p-4 z-30">
             <SidebarMenu />
-            <hr className="border-zinc-400 my-7 opacity-30 mx-1" />
+            <hr className="my-7 opacity-30 mx-1" />
             <div className="w-full flex flex-col gap-5 md:px-0 px-3">
                 {mappedChannels}
                 <div className="w-full flex items-center justify-center p-1 group">
-                    <PlusCircle className="w-10 h-10 stroke-zinc-400 group-hover:stroke-zinc-100" />
+                    <PlusCircle className="w-10 h-10  " />
                 </div>
             </div>
         </div>

@@ -50,8 +50,8 @@ const ChannelView = () => {
     }, [conn, setMessageAtoms]);
 
     return (
-        <div className="md:pl-[370px] pl-5 px-5 pt-5 pb-1 flex flex-col md:w-[calc(100%-230px)] w-full gap-3 text-zinc-200">
-            <div className="w-full rounded-xl md:h-[calc(100vh-132px)] h-auto flex flex-col-reverse gap-5 bg-[#121212] px-5 md:pt-5 py-2 pt-5 overflow-y-scroll">
+        <div className="md:pl-[370px] pl-5 px-5 pt-5 pb-1 flex flex-col md:w-[calc(100%-230px)] w-full gap-3 ">
+            <div className="w-full rounded-xl md:h-[calc(100vh-132px)] h-auto flex flex-col-reverse gap-5 px-5 md:pt-5 py-2 pt-5 overflow-y-scroll">
                 {channelMessages.map((message) => (
                     <ChatMessage
                         key={message.toString()}

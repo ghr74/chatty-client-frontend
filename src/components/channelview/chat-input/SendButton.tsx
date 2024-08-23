@@ -10,7 +10,6 @@ const SendButton = ({
 }) => {
     return (
         <Button
-            className="bg-[#121212] text-zinc-400 border-zinc-600"
             variant="outline"
             size="icon"
             onClick={handler}

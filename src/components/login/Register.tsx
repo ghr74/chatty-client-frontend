@@ -110,7 +110,7 @@ const RegisterForm = () => {
 
 const Register = () => {
     return (
-        <div className="bg-zinc-900 w-full h-full">
+        <div className="w-full h-full">
             <div className="flex items-center h-full">
                 <RegisterForm />
             </div>

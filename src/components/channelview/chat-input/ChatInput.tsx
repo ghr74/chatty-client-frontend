@@ -54,7 +54,6 @@ const ChatInput = () => {
     return (
         <>
             <Input
-                className="border-zinc-800 bg-[#121212]"
                 placeholder={`Message ${channel?.name ?? ""} ...`}
                 onChange={(e) => {
                     setInput(e.target.value);

@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { getTestPasswort, getTestUser } from "@/lib/env";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
+import DarkModeSwitcher from "../util/DarkModeSwitcher";
 
 const LoginForm = () => {
     const router = useRouter();
@@ -82,8 +83,11 @@ const LoginForm = () => {
 
 const Login = () => {
     return (
-        <div className="bg-zinc-900 w-full h-full">
-            <div className="flex items-center h-full">
+        <div className="h-full w-full">
+            <div className="flex w-full flex-row-reverse">
+                <DarkModeSwitcher />
+            </div>
+            <div className="flex h-full items-center">
                 <LoginForm />
             </div>
         </div>

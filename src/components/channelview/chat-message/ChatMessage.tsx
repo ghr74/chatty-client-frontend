@@ -29,7 +29,11 @@ const ChatMessage = ({ messageAtom }: { messageAtom: Atom<Message> }) => {
                     "flex-row-reverse": !isSelf,
                 })}
             >
-                <div className={cn("rounded-lg bg-zinc-600 p-2 px-3", {"bg-slate-700": isSelf})}>
+                <div
+                    className={cn("rounded-lg p-2 px-3", {
+                        "bg-slate-700": isSelf,
+                    })}
+                >
                     <span>{message.message}</span>
                 </div>
                 <div className="flex gap-3 items-center flex-row-reverse">
@@ -55,39 +59,3 @@ const ChatMessage = ({ messageAtom }: { messageAtom: Atom<Message> }) => {
 };
 
 export default ChatMessage;
-
-// <div className="w-full rounded-xl bg-zinc-500">
-//     <div className="p-3 text-right">
-//         <span>{message.message}</span>
-//     </div>
-// </div>
-
-// <div
-//     className={cn("w-full flex gap-5", {
-//         "justify-end": message.sender === user.id,
-//         "flex-row-reverse": message.sender !== user.id,
-//     })}
-// >
-//     <div className="w-5/6 rounded-xl bg-zinc-500">
-//         <div className="p-3 text-right">
-//             <span>{message.message}</span>
-//         </div>
-//     </div>
-//     <div className="flex flex-col">
-//         <div className="flex gap-3 items-center flex-row-reverse">
-//             <span>
-//                 {message.sender === user.id ? "You" : message.sender}
-//             </span>
-//             <Avatar className="w-7 h-7">
-//                 <AvatarImage src="/channel.png"></AvatarImage>
-//                 <AvatarFallback>{user.name}</AvatarFallback>
-//             </Avatar>
-//         </div>
-//         <span>
-//             {new Date(message.sentAt).toLocaleTimeString("en-US", {
-//                 hour: "2-digit",
-//                 minute: "2-digit",
-//             })}
-//         </span>
-//     </div>
-// </div>
