@@ -7,20 +7,58 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Link, useRouter } from "@tanstack/react-router";
-import { useCallback, useState } from "react";
+import DarkModeSwitcher from "../util/DarkModeSwitcher";
+import { useMutation } from "@tanstack/react-query";
+import { superstructResolver } from "@hookform/resolvers/superstruct";
+import { UserRegistrationDataSchema } from "@/types/backendTypes";
+import { Infer } from "superstruct";
+import { getUrl } from "@/lib/url";
+import { useForm } from "react-hook-form";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "../ui/form";
+import { Loader2 } from "lucide-react";
 
 const RegisterForm = () => {
     const router = useRouter();
-    const [userValue, setUserValue] = useState("");
-    const [emailValue, setEmailValue] = useState("");
-    const [passwordValue, setPasswordValue] = useState("");
-    const [secretValue, setSecretValue] = useState("");
 
-    const handleRegisterButtonClick = useCallback(() => {
-        router.navigate({ to: "/login" });
-    }, [router]);
+    const register = useMutation({
+        mutationFn: (
+            registerData: Infer<typeof UserRegistrationDataSchema>,
+        ) => {
+            return fetch(getUrl("register"), {
+                method: "POST",
+                body: JSON.stringify(registerData),
+            });
+        },
+    });
+
+    const form = useForm<Infer<typeof UserRegistrationDataSchema>>({
+        resolver: superstructResolver(UserRegistrationDataSchema),
+        defaultValues: {
+            userName: "",
+            email: "",
+            password: "",
+            secret: "",
+        },
+    });
+
+    const onSubmit = (values: Infer<typeof UserRegistrationDataSchema>) => {
+        console.log(values);
+        register
+            .mutateAsync(values)
+            .then(() => {
+                router.navigate({ to: "/login" });
+            })
+            .catch((e) => alert(`Woopsies! ${e}`));
+    };
 
     return (
         <Card className="mx-auto max-w-sm">
@@ -31,72 +69,100 @@ const RegisterForm = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="grid gap-4">
-                    <div className="grid gap-2 mb-4">
-                        <Label htmlFor="email">
-                            Displayname (can be changed later)
-                        </Label>
-                        <Input
-                            id="user"
-                            type="text"
-                            value={userValue}
-                            onChange={(e) => setUserValue(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="grid gap-2 mb-3">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            value={emailValue}
-                            onChange={(e) => setEmailValue(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                        </div>
-                        <Input
-                            id="password"
-                            type="password"
-                            value={passwordValue}
-                            onChange={(e) => setPasswordValue(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="grid gap-2 mb-3">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Repeat Password</Label>
-                        </div>
-                        <Input
-                            id="password"
-                            type="password"
-                            value={passwordValue}
-                            required
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Secret</Label>
-                        </div>
-                        <Input
-                            id="password"
-                            type="password"
-                            value={secretValue}
-                            onChange={(e) => setSecretValue(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <Button
-                        type="submit"
-                        className="w-full"
-                        onClick={handleRegisterButtonClick}
+                <Form {...form}>
+                    <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-8"
                     >
-                        Register
-                    </Button>
-                </div>
+                        <FormField
+                            control={form.control}
+                            name="userName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Username</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="MyFunnyUsername"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        This is your public display name. It can
+                                        be changed later. Maximum of 16
+                                        characters.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="user@example.com"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormDescription></FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="hunter2"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Please choose a secure password. Must
+                                        have at least 8 characters.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="secret"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Secret</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Enter token"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Signing up requires a secret token.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={register.isPending}
+                        >
+                            {register.isPending && (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            Register
+                        </Button>
+                    </form>
+                </Form>
                 <div className="mt-4 text-center text-sm">
                     Already have an account?{" "}
                     <Link to="/login" className="underline">
@@ -110,8 +176,11 @@ const RegisterForm = () => {
 
 const Register = () => {
     return (
-        <div className="w-full h-full">
-            <div className="flex items-center h-full">
+        <div className="relative flex h-full w-full flex-col items-center justify-center">
+            <div className="mr-1 mt-1 flex w-full flex-row-reverse">
+                <DarkModeSwitcher />
+            </div>
+            <div className="flex h-full items-center gap-4">
                 <RegisterForm />
             </div>
         </div>

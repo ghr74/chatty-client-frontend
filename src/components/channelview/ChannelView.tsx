@@ -6,6 +6,7 @@ import { HubConnectionBuilder } from "@microsoft/signalr";
 import { atom, useAtom } from "jotai";
 import { Message } from "@/types/backendTypes";
 import ChatMessage from "./chat-message/ChatMessage";
+import { getUrl } from "@/lib/url";
 
 const route = getRouteApi("/_authed/channel/$channelId");
 const ChannelView = () => {
@@ -30,7 +31,7 @@ const ChannelView = () => {
     useEffect(() => {
         if (conn) return;
         const newConn = new HubConnectionBuilder()
-            .withUrl("http://localhost:5080/chat")
+            .withUrl(getUrl("chat"))
             .withAutomaticReconnect()
             .build();
         setConn(newConn);
@@ -50,8 +51,8 @@ const ChannelView = () => {
     }, [conn, setMessageAtoms]);
 
     return (
-        <div className="md:pl-[370px] pl-5 px-5 pt-5 pb-1 flex flex-col md:w-[calc(100%-230px)] w-full gap-3 ">
-            <div className="w-full rounded-xl md:h-[calc(100vh-132px)] h-auto flex flex-col-reverse gap-5 px-5 md:pt-5 py-2 pt-5 overflow-y-scroll">
+        <div className="flex w-full flex-col gap-3 px-5 pb-1 pl-5 pt-5 md:w-[calc(100%-230px)] md:pl-[370px]">
+            <div className="flex h-auto w-full flex-col-reverse gap-5 overflow-y-scroll rounded-xl px-5 py-2 pt-5 md:h-[calc(100vh-132px)] md:pt-5">
                 {channelMessages.map((message) => (
                     <ChatMessage
                         key={message.toString()}
@@ -59,7 +60,7 @@ const ChannelView = () => {
                     />
                 ))}
             </div>
-            <div className="flex items-center space-x-2 w-full rounded-xl md:h-[40px]">
+            <div className="flex w-full items-center space-x-2 rounded-xl md:h-[40px]">
                 <ChatInput />
             </div>
         </div>

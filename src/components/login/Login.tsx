@@ -83,8 +83,8 @@ const LoginForm = () => {
 
 const Login = () => {
     return (
-        <div className="h-full w-full">
-            <div className="flex w-full flex-row-reverse">
+        <div className="relative flex h-full w-full flex-col items-center justify-center">
+            <div className="mr-1 mt-1 flex w-full flex-row-reverse">
                 <DarkModeSwitcher />
             </div>
             <div className="flex h-full items-center">

@@ -1,3 +1,5 @@
+import { nonempty, object, size, string } from "superstruct";
+
 export type Channel = {
     id: number;
     name: string;
@@ -20,3 +22,15 @@ export type User = {
     name: string;
     image?: string;
 };
+
+export const UserRegistrationDataSchema = object({
+    email: string(),
+    password: size(string(), 8, 64),
+    userName: size(string(), 1, 16),
+    secret: nonempty(string()),
+});
+
+export const UserLoginDataSchema = object({
+    email: string(),
+    password: size(string(), 8, 64),
+});

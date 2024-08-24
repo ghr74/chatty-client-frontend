@@ -1,11 +1,13 @@
 import { routeTree } from "./routeTree.gen";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { useAtomValue } from "jotai";
 import { darkModeAtom } from "./atoms/darkMode";
 import { FC, Suspense, useEffect } from "react";
 
 const router = createRouter({ routeTree });
+const queryClient = new QueryClient();
 
 declare module "@tanstack/react-router" {
     interface Register {
@@ -23,7 +25,9 @@ const AppWrapper: FC = () => {
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <RouterProvider router={router} />
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router} />
+            </QueryClientProvider>
         </Suspense>
     );
 };
