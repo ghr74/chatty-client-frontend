@@ -1,14 +1,19 @@
-import { useUser } from "@/data/users";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Message } from "@/types/backendTypes";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
-import { Atom, useAtom } from "jotai";
+import { Atom, useAtom, useAtomValue } from "jotai";
+import { usePublicUserById } from "@/api/user";
+import { tokenUserIdAtom } from "@/atoms/accessToken";
 
 const ChatMessage = ({ messageAtom }: { messageAtom: Atom<Message> }) => {
     const [message] = useAtom(messageAtom);
-    const user = useUser();
-    const isSelf = useMemo(() => message.userId === user.id, [message, user]);
+    const tokenUserId = useAtomValue(tokenUserIdAtom);
+    const { data: messageUser } = usePublicUserById(message.userId);
+    const isSelf = useMemo(
+        () => message.userId === tokenUserId,
+        [message.userId, tokenUserId],
+    );
     return (
         <div
             className={cn("flex flex-col gap-1", {
@@ -22,7 +27,7 @@ const ChatMessage = ({ messageAtom }: { messageAtom: Atom<Message> }) => {
                     "self-end": isSelf,
                 })}
             >
-                {message.userName}
+                {messageUser?.username ?? message.userName}
             </span>
             <div
                 className={cn("flex gap-2", {
@@ -36,10 +41,12 @@ const ChatMessage = ({ messageAtom }: { messageAtom: Atom<Message> }) => {
                 >
                     <span>{message.message}</span>
                 </div>
-                <div className="flex gap-3 items-center flex-row-reverse">
-                    <Avatar className="w-9 h-9">
+                <div className="flex flex-row-reverse items-center gap-3">
+                    <Avatar className="h-9 w-9">
                         <AvatarImage src="/channel.png"></AvatarImage>
-                        <AvatarFallback>{user.name}</AvatarFallback>
+                        <AvatarFallback>
+                            {messageUser?.username ?? message.userName}
+                        </AvatarFallback>
                     </Avatar>
                 </div>
             </div>

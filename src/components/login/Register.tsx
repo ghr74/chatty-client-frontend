@@ -13,7 +13,6 @@ import { useMutation } from "@tanstack/react-query";
 import { superstructResolver } from "@hookform/resolvers/superstruct";
 import { UserRegistrationDataSchema } from "@/types/backendTypes";
 import { Infer } from "superstruct";
-import { getUrl } from "@/lib/url";
 import { useForm } from "react-hook-form";
 import {
     Form,
@@ -25,6 +24,7 @@ import {
     FormMessage,
 } from "../ui/form";
 import { Loader2 } from "lucide-react";
+import { BACKEND_URL } from "@/lib/env";
 
 const RegisterForm = () => {
     const router = useRouter();
@@ -33,10 +33,7 @@ const RegisterForm = () => {
         mutationFn: (
             registerData: Infer<typeof UserRegistrationDataSchema>,
         ) => {
-            return fetch(getUrl("register"), {
-                method: "POST",
-                body: JSON.stringify(registerData),
-            });
+            return fetch_post(`${BACKEND_URL}/register`, registerData);
         },
     });
 
@@ -51,13 +48,14 @@ const RegisterForm = () => {
     });
 
     const onSubmit = (values: Infer<typeof UserRegistrationDataSchema>) => {
-        console.log(values);
-        register
-            .mutateAsync(values)
-            .then(() => {
+        register.mutate(values, {
+            onSuccess: () => {
                 router.navigate({ to: "/login" });
-            })
-            .catch((e) => alert(`Woopsies! ${e}`));
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
     };
 
     return (
@@ -104,6 +102,7 @@ const RegisterForm = () => {
                                     <FormControl>
                                         <Input
                                             placeholder="user@example.com"
+                                            type="email"
                                             {...field}
                                         />
                                     </FormControl>
@@ -121,6 +120,7 @@ const RegisterForm = () => {
                                     <FormControl>
                                         <Input
                                             placeholder="hunter2"
+                                            type="password"
                                             {...field}
                                         />
                                     </FormControl>
@@ -141,6 +141,7 @@ const RegisterForm = () => {
                                     <FormControl>
                                         <Input
                                             placeholder="Enter token"
+                                            type="password"
                                             {...field}
                                         />
                                     </FormControl>
@@ -180,7 +181,7 @@ const Register = () => {
             <div className="mr-1 mt-1 flex w-full flex-row-reverse">
                 <DarkModeSwitcher />
             </div>
-            <div className="flex h-full items-center gap-4">
+            <div className="flex h-full items-center">
                 <RegisterForm />
             </div>
         </div>

@@ -6,7 +6,7 @@ import { splitAtom } from "jotai/utils";
 export const mock_messages: Message[] = [
     {
         id: 1,
-        userId: 2,
+        userId: "46068249-a2dd-4d54-92d7-750dbd966ae7",
         userName: "Chatter2",
         channelId: 2,
         message: "Hey there, this is a message!",
@@ -14,7 +14,7 @@ export const mock_messages: Message[] = [
     },
     {
         id: 2,
-        userId: 1,
+        userId: "5319ae5a-c3e1-4ee2-bed5-8302537d4959",
         userName: "User1",
         channelId: 2,
         message: "Thanks for sending a message, I will not read it.",
@@ -22,7 +22,7 @@ export const mock_messages: Message[] = [
     },
     {
         id: 3,
-        userId: 2,
+        userId: "46068249-a2dd-4d54-92d7-750dbd966ae7",
         userName: "Chatter2",
         channelId: 2,
         message: "Erm, okay...",
@@ -30,7 +30,7 @@ export const mock_messages: Message[] = [
     },
     {
         id: 4,
-        userId: 1,
+        userId: "5319ae5a-c3e1-4ee2-bed5-8302537d4959",
         userName: "User1",
         channelId: 1,
         message:
@@ -39,7 +39,7 @@ export const mock_messages: Message[] = [
     },
     {
         id: 5,
-        userId: 3,
+        userId: "ad641752-a307-4247-8619-dc82bf9fc8f0",
         userName: "3rdUser",
         channelId: 2,
         message:

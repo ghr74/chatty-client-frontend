@@ -1,4 +1,4 @@
-import { nonempty, object, size, string } from "superstruct";
+import { nonempty, object, size, string, Infer } from "superstruct";
 
 export type Channel = {
     id: number;
@@ -11,17 +11,26 @@ export type Channel = {
 export type Message = {
     id: number;
     userName: string;
-    userId: number;
+    userId: string;
     channelId: number;
     message: string;
     sentAt: string;
 };
 
-export type User = {
-    id: number;
-    name: string;
-    image?: string;
-};
+export const OwnUserSchema = object({
+    id: nonempty(string()),
+    username: nonempty(string()),
+    email: nonempty(string()),
+});
+
+export type OwnUser = Infer<typeof OwnUserSchema>;
+
+export const PublicUserInfoSchema = object({
+    id: nonempty(string()),
+    username: nonempty(string()),
+});
+
+export type PublicUserInfo = Infer<typeof PublicUserInfoSchema>;
 
 export const UserRegistrationDataSchema = object({
     email: string(),
@@ -34,3 +43,9 @@ export const UserLoginDataSchema = object({
     email: string(),
     password: size(string(), 8, 64),
 });
+
+export const LoginResposeSchema = object({
+    token: nonempty(string()),
+});
+
+export type LoginResponse = Infer<typeof LoginResposeSchema>;

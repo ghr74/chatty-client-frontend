@@ -1,3 +1,2 @@
-export const getTestUser = () => import.meta.env.VITE_TEST_USER;
-export const getTestPasswort = () => import.meta.env.VITE_TEST_PASSWORD;
-export const getEnvironment = () => process.env.ENVIRONMENT || "DEV";
+export const IS_DEV_ENV = import.meta.env.MODE === "development";
+export const BACKEND_URL = "http://localhost:5080";

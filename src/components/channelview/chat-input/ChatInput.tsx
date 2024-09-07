@@ -1,20 +1,15 @@
 import { Input } from "@/components/ui/input";
-import {
-    connectionAtom as chatConnectionAtom,
-    messagesSplitAtom,
-    mock_messages,
-} from "@/data/messages";
-import { useUser } from "@/data/users";
+import { connectionAtom as chatConnectionAtom } from "@/data/messages";
 import { useParams } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import SendButton from "./SendButton";
-import { atom, useAtomValue, useSetAtom } from "jotai";
+import { atom, useAtomValue } from "jotai";
 import { HubConnectionState } from "@microsoft/signalr";
 import { channelAtomsAtom } from "@/data/channels";
+import { useOwnUser } from "@/api/user";
 
 const ChatInput = () => {
     const conn = useAtomValue(chatConnectionAtom);
-    const setMessagesSplitAtom = useSetAtom(messagesSplitAtom);
     const { channelId } = useParams({ from: "/_authed/channel/$channelId" });
     const channelAtom = useMemo(
         () =>
@@ -28,27 +23,18 @@ const ChatInput = () => {
         [channelId],
     );
     const channel = useAtomValue(channelAtom);
-    const user = useUser();
+    const { data: user } = useOwnUser();
     const [input, setInput] = useState("");
     const handleInputEnter = useCallback(() => {
-        if (input.length <= 0) return;
-        const mock_message = {
-            userName: user.name, // backend gets this from session API token, the returned message object will have the default username, which we will then make a WS request from the frontend to resolve to the current one. the async response to this request will invoke the same function to set value in a name map that the event for user changing display name would
-            id: mock_messages.length, // what the hek is a message ID? backend gets this from GUID call probably
-            channelId, // we'll have to pass this in
-            sentAt: new Date().toISOString(), // we can pass this in, but also save the time from the backend so we can do statistics later on sent/received
-            userId: user.id, // ?? also get this from Session API token
-            message: input, // yeah we'll need to pass this in
-        };
+        if (input.length <= 0 || !user) return;
         if (conn?.state === HubConnectionState.Connected) {
             console.log("Sending Message...");
             void conn.send("SendMessage", user.id.toString(), input);
         } else {
-            console.log("Disconnected, updating local message...");
-            setMessagesSplitAtom({ type: "insert", value: mock_message });
+            console.log("Disconnected, can't post message...");
         }
         setInput("");
-    }, [channelId, conn, input, setMessagesSplitAtom, user.id, user.name]);
+    }, [conn, input, user]);
     const hasInput = useMemo(() => input.length <= 0, [input.length]);
 
     return (
